@@ -46,39 +46,29 @@ new ProductImage('usb', 'img/usb.gif');
 new ProductImage('water-can', 'img/water-can.jpg');
 new ProductImage('wine-glass', 'img/wine-glass.jpg');
 
-function displayRandomImages() {
-  var leftImageIndex;
-  var middelImageIndex;
-  var rightImageIndex;
+var leftImageIndex= Math.floor((Math.random() * allProduct.length));
+var middelImageIndex = generateRandom(leftImageIndex, rightImageIndex,-1,-1,-1);
+var rightImageIndex= generateRandom(-1, leftImageIndex,-1,-1,-1);
 
-  leftImageIndex = Math.floor((Math.random() * allProduct.length));
+
+function displayRandomImages() {
+
+  leftImageIndex = generateRandom(currentImageRow[0], currentImageRow[1],currentImageRow[2],-1,-1);
+  middelImageIndex = generateRandom(currentImageRow[0], currentImageRow[1],currentImageRow[2],-1,leftImageIndex);
+  rightImageIndex = generateRandom(currentImageRow[0], currentImageRow[1],currentImageRow[2],middelImageIndex,leftImageIndex);
   currentImageRow[0] = leftImageIndex;
-  rightImageIndex = generateRandom(-1, leftImageIndex);
-  middelImageIndex = generateRandom(leftImageIndex, rightImageIndex);
   currentImageRow[1] = rightImageIndex;
   currentImageRow[2] = middelImageIndex;
-  console.log(totalClicks);
 
+  console.log(currentImageRow);
   displayImages(leftImageIndex, middelImageIndex, rightImageIndex);
 }
 
-function generateRandom(FirstImage, SeconedImage) {
+function generateRandom(FirstImage, SeconedImage ,ThirdImage ,CurFirstImg,CurSecImage) {
   var num = Math.floor(Math.random() * (allProduct.length - 0)) + 0;
-  return (num === FirstImage || num === SeconedImage) ? generateRandom(FirstImage, SeconedImage) : num;
+  return (num === FirstImage || num === SeconedImage|| num === ThirdImage|| num === CurFirstImg|| num === CurSecImage) ? generateRandom(FirstImage, SeconedImage ,ThirdImage ,CurFirstImg,CurSecImage) : num;
 }
 
-
-// function checkImageRow(currentIndex) {
-
-//   for (var i = 0; i < currentImageRow.length; i++) {
-
-//     if( currentImageRow[i] === currentIndex){
-//       return true;
-//     }
-//   }
-//   return false;
-
-// }
 
 function displayImages(leftIndex, MiddelIndex, rightIndex) {
   currentLeftSideImage = allProduct[leftIndex];
@@ -129,7 +119,6 @@ function displayResults() {
     listItem = document.createElement('li');
     // listItem.textContent = allProduct[i].ProductName + 'Slicer' + allProduct[i].timesDisplayed+ ' and votes are ' + allProduct[i].votes;
     listItem.textContent = allProduct[i].ProductName + 'Slicer had '+allProduct[i].votes +' Votes and was shown '+allProduct[i].timesDisplayed+'Times';
- 
     resultsList.appendChild(listItem);
   }
 }
