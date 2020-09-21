@@ -34,10 +34,8 @@ border: black 1px solid;
     margin-top: 20px;
 }
 
-p{
-    width: 980px;
-    height: 200px;
-    border: red 1px solid;
+#myChart{
+    border: blue 1px solid;
 }
 
 #footer{
