@@ -16,6 +16,17 @@ var totalClicks = 0;
 
 var resultsList = document.getElementById('finalResult');
 
+
+
+////// For Chart //////
+var arrayNames =[];
+var arrayVotes =[];
+var arrayDisplayTime =[];
+var backgroundColor = [];
+var borderColor = [];
+
+////
+
 // constructor
 function ProductImage(ProductName, link) {
   this.ProductName = ProductName;
@@ -23,6 +34,7 @@ function ProductImage(ProductName, link) {
   this.votes = 0;
   this.timesDisplayed = 0;
   allProduct.push(this);
+
 }
 
 new ProductImage('bag', 'img/bag.jpg');
@@ -46,27 +58,26 @@ new ProductImage('usb', 'img/usb.gif');
 new ProductImage('water-can', 'img/water-can.jpg');
 new ProductImage('wine-glass', 'img/wine-glass.jpg');
 
-var leftImageIndex= Math.floor((Math.random() * allProduct.length));
-var middelImageIndex = generateRandom(leftImageIndex, rightImageIndex,-1,-1,-1);
-var rightImageIndex= generateRandom(-1, leftImageIndex,-1,-1,-1);
+var leftImageIndex = Math.floor((Math.random() * allProduct.length));
+var middelImageIndex = generateRandom(leftImageIndex, rightImageIndex, -1, -1, -1);
+var rightImageIndex = generateRandom(-1, leftImageIndex, -1, -1, -1);
 
 
 function displayRandomImages() {
 
-  leftImageIndex = generateRandom(currentImageRow[0], currentImageRow[1],currentImageRow[2],-1,-1);
-  middelImageIndex = generateRandom(currentImageRow[0], currentImageRow[1],currentImageRow[2],-1,leftImageIndex);
-  rightImageIndex = generateRandom(currentImageRow[0], currentImageRow[1],currentImageRow[2],middelImageIndex,leftImageIndex);
+  leftImageIndex = generateRandom(currentImageRow[0], currentImageRow[1], currentImageRow[2], -1, -1);
+  middelImageIndex = generateRandom(currentImageRow[0], currentImageRow[1], currentImageRow[2], -1, leftImageIndex);
+  rightImageIndex = generateRandom(currentImageRow[0], currentImageRow[1], currentImageRow[2], middelImageIndex, leftImageIndex);
   currentImageRow[0] = leftImageIndex;
   currentImageRow[1] = rightImageIndex;
   currentImageRow[2] = middelImageIndex;
 
-  console.log(currentImageRow);
   displayImages(leftImageIndex, middelImageIndex, rightImageIndex);
 }
 
-function generateRandom(FirstImage, SeconedImage ,ThirdImage ,CurFirstImg,CurSecImage) {
+function generateRandom(FirstImage, SeconedImage, ThirdImage, CurFirstImg, CurSecImage) {
   var num = Math.floor(Math.random() * (allProduct.length - 0)) + 0;
-  return (num === FirstImage || num === SeconedImage|| num === ThirdImage|| num === CurFirstImg|| num === CurSecImage) ? generateRandom(FirstImage, SeconedImage ,ThirdImage ,CurFirstImg,CurSecImage) : num;
+  return (num === FirstImage || num === SeconedImage || num === ThirdImage || num === CurFirstImg || num === CurSecImage) ? generateRandom(FirstImage, SeconedImage, ThirdImage, CurFirstImg, CurSecImage) : num;
 }
 
 
@@ -110,6 +121,7 @@ function handleVote(event) {
   if (totalClicks >= 25) {
     imagesSection.removeEventListener('click', handleVote);
     displayResults();
+    canvasChart();
   }
 }
 
@@ -118,7 +130,94 @@ function displayResults() {
   for (var i = 0; i < allProduct.length; i++) {
     listItem = document.createElement('li');
     // listItem.textContent = allProduct[i].ProductName + 'Slicer' + allProduct[i].timesDisplayed+ ' and votes are ' + allProduct[i].votes;
-    listItem.textContent = allProduct[i].ProductName + 'Slicer had '+allProduct[i].votes +' Votes and was shown '+allProduct[i].timesDisplayed+'Times';
+    listItem.textContent = allProduct[i].ProductName + 'Slicer had ' + allProduct[i].votes + ' Votes and was shown ' + allProduct[i].timesDisplayed + 'Times';
     resultsList.appendChild(listItem);
   }
 }
+
+function canvasChart() {
+  getingobjectsName();
+  getingobjectsVotes();
+  getingobjectsDisplayTime();
+
+  // For every data we have ...
+  for (var i = 0; i < allProduct.length; i++) {
+
+    // We generate a random color
+    var color = "rgba(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ",";
+
+    // We push this new color to both background and border color arrays
+    // .. a lighter color is used for the background
+    backgroundColor.push(color + "0.2)");
+    borderColor.push(color + "1)");
+}
+
+  var ctx = document.getElementById('myChart');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: arrayNames,
+      datasets: [{
+        label: '# of Votes',
+        data: arrayVotes,
+        backgroundColor: backgroundColor,
+        borderColor:borderColor,
+        borderWidth: 1
+      },{label: '# Display Time',
+        data: arrayDisplayTime,
+        backgroundColor: backgroundColor,
+        borderColor:borderColor,
+        borderWidth: 1}]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+
+
+}
+
+
+function getingobjectsName(){
+
+  arrayNames =[];
+
+  for(var i=0;i<allProduct.length;i++){
+
+    arrayNames[i]=allProduct[i].ProductName;
+  }
+
+}
+
+
+
+function getingobjectsVotes(){
+
+  arrayVotes =[];
+
+  for(var i=0;i<allProduct.length;i++){
+
+    arrayVotes[i]=allProduct[i].votes;
+  }
+
+}
+
+
+function getingobjectsDisplayTime(){
+
+  arrayDisplayTime =[];
+
+  for(var i=0;i<allProduct.length;i++){
+
+    arrayDisplayTime[i]=allProduct[i].timesDisplayed;
+  }
+
+}
+
+
