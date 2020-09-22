@@ -24,9 +24,13 @@ var arrayVotes =[];
 var arrayDisplayTime =[];
 var backgroundColor = [];
 var borderColor = [];
+var localarrayVotes=[];
 
+if(localStorage.length == 0){
+  localarrayVotes = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  localStorage.setItem('localarrayVotes',JSON.stringify(localarrayVotes));
+}
 ////
-
 // constructor
 function ProductImage(ProductName, link) {
   this.ProductName = ProductName;
@@ -132,6 +136,7 @@ function displayResults() {
     // listItem.textContent = allProduct[i].ProductName + 'Slicer' + allProduct[i].timesDisplayed+ ' and votes are ' + allProduct[i].votes;
     listItem.textContent = allProduct[i].ProductName + 'Slicer had ' + allProduct[i].votes + ' Votes and was shown ' + allProduct[i].timesDisplayed + 'Times';
     resultsList.appendChild(listItem);
+
   }
 }
 
@@ -144,13 +149,13 @@ function canvasChart() {
   for (var i = 0; i < allProduct.length; i++) {
 
     // We generate a random color
-    var color = "rgba(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ",";
+    var color = 'rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',';
 
     // We push this new color to both background and border color arrays
     // .. a lighter color is used for the background
-    backgroundColor.push(color + "0.2)");
-    borderColor.push(color + "1)");
-}
+    backgroundColor.push(color + '0.2)');
+    borderColor.push(color + '1)');
+  }
 
   var ctx = document.getElementById('myChart');
   var myChart = new Chart(ctx, {
@@ -159,7 +164,7 @@ function canvasChart() {
       labels: arrayNames,
       datasets: [{
         label: '# of Votes',
-        data: arrayVotes,
+        data: localarrayVotes,
         backgroundColor: backgroundColor,
         borderColor:borderColor,
         borderWidth: 1
@@ -180,7 +185,8 @@ function canvasChart() {
     }
   });
 
-
+console.log(arrayVotes);
+console.log(localarrayVotes);
 }
 
 
@@ -198,13 +204,16 @@ function getingobjectsName(){
 
 
 function getingobjectsVotes(){
-
-  arrayVotes =[];
-
+    
+  localarrayVotes= JSON.parse(localStorage.getItem('localarrayVotes'));
   for(var i=0;i<allProduct.length;i++){
 
     arrayVotes[i]=allProduct[i].votes;
+    localarrayVotes[i]+=arrayVotes[i];
   }
+  localStorage.setItem('arrayVotes',JSON.stringify(arrayVotes));
+
+  localStorage.setItem('localarrayVotes',JSON.stringify(localarrayVotes));
 
 }
 
