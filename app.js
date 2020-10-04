@@ -15,6 +15,7 @@ var currentRightSideImage;
 var totalClicks = 0;
 
 var resultsList = document.getElementById('finalResult');
+var asidsrc = document.getElementById('asidsrc');
 
 
 
@@ -122,7 +123,7 @@ function handleVote(event) {
     totalClicks++;
   }
 
-  if (totalClicks >= 25) {
+  if (totalClicks >= 5) {
     imagesSection.removeEventListener('click', handleVote);
     displayResults();
     canvasChart();
@@ -138,6 +139,9 @@ function displayResults() {
     resultsList.appendChild(listItem);
 
   }
+  var imgasid= document.getElementById('imgasid');
+  imgasid.setAttribute('src','img/66261Convert.png');
+  asidsrc.appendChild(imgasid);
 }
 
 function canvasChart() {
@@ -187,6 +191,8 @@ function canvasChart() {
 
 console.log(arrayVotes);
 console.log(localarrayVotes);
+
+
 }
 
 
