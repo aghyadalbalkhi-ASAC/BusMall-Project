@@ -123,7 +123,7 @@ function handleVote(event) {
     totalClicks++;
   }
 
-  if (totalClicks >= 5) {
+  if (totalClicks >= 25) {
     imagesSection.removeEventListener('click', handleVote);
     displayResults();
     canvasChart();
